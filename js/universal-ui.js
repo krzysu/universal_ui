@@ -1,7 +1,9 @@
 
-(function($){
+//(function($){
 
-	var Ui = {
+	var Ui = {};
+
+	Ui = { //PanelsSupervisor -> to refactor
 	
 		panelsCounter: 0,
 		panels: [],
@@ -23,98 +25,102 @@
 			
 			this.$panels.each(function(index, panel) {
 				
-				//that.panels.push(Panel.init(options, index)); //sth like this
-				Panel.init(options, index); //temporary only
+				that.panels.push(new Ui.Panel(that.options, panel, index));
 				that.panelsCounter++;
 				
+				
 			});
+			
+			that.panels[0].changeState(0); //test
+			that.panels[1].changeState(2); //test
 		}
 	};
  
-	var Panel = {        
+ 
+	/* Panel - single panel object */
+	Ui.Panel = function( options, thisPanel, panelsCounter ) { //constructor
+
+		var that = this;
 		
-		states: ['mini', 'normal', 'full'], //[0,1,2]
-		state: 1,
-		
-		draggable: true,
-		resizable: true,
-		sortable: true,
-		
-		$panel: null,
-		$panelMiniContent: null,
-		$panelNormalContent: null,
-		$panelFullContent: null,
-		
-		options: {
-			panelSelector: '.panel',
+		this.options = {
 			panelMiniContentSelector: '.content_mini',
 			panelNormalContentSelector: '.content_normal',
 			panelFullContentSelector: '.content_full'
-		},
+		};
 		
-		init: function( options, panelsCounter ){
+		this.options = $.extend({}, that.options, options);
 		
-			var that = this;
-			var opt = this.options = $.extend({}, that.options, options);
+		//states: ['mini', 'normal', 'full'], //[0,1,2]
+		this.state = 1;
+		
+		this.draggable = true;
+		this.resizable = true;
+		this.sortable = true;
+		
+		this.$panel = $(thisPanel);
+		this.$panel.attr('id','panel-' + panelsCounter);
+		
+		this.$panelMiniContent = this.$panel.find(this.options.panelMiniContentSelector);
+		this.$panelNormalContent = this.$panel.find(this.options.panelNormalContentSelector);
+		this.$panelFullContent = this.$panel.find(this.options.panelFullContentSelector);
+		
+		this.$panel.bind('statechange', function(e, data){
+			switch(data.state) {
+				case 0:
+					that.minimalize();
+					break;
+				case 1:
+					that.normalize();
+					break;
+				case 2:
+					that.supersize();
+					break;
+				default:
+					throw new Error("state unknown");
+					return;
+			}
 			
-			this.$panel = $(opt.panelSelector).eq(0); //only one element is allowed
-			this.$panel.attr('id','#panel-' + panelsCounter);
-			
-			this.$panel.bind('statechange', function(e, data){
-				switch(data.state) {
-					case 0:
-						that.minimalize();
-						break;
-					case 1:
-						that.normalize();
-						break;
-					case 2:
-						that.supersize();
-						break;
-					default:
-						throw new Error("state unknown");
-				}
-
-			});
-		},
-		
-		minimalize: function(){
-			
-			this.$panel.removeClass('normalized supersized');
-			this.$panel.addClass('minimalized');
-			//this.$panelMiniContent.text('I am minimalized!');
-		},
-		
-		normalize: function(){
-			
-			this.$panel.removeClass('minimalized supersized');
-			this.$panel.addClass('normalized');
-			//this.$panelNormalContent.text('I am normalized!');
-		},
-		
-		supersize: function(){
-			
-			this.$panel.removeClass('minimalized normalized');
-			this.$panel.addClass('supersized');
-			//this.$panelFullContent.text('I am supersized!');
-		},
-
-		move: function(){
-
-		},
-		
-		changeState: function( newState ){
-		
-			this.$panel.trigger('statechange', { state: newState });
-		},
-		
-		getState: function(){
-		
-			return this.state();
-		}
-		
-		
+			that.state = data.state;
+		});
 	};
+	
+	Ui.Panel.prototype.getState = function(){
+	
+		return this.state;
+	}
+
+	Ui.Panel.prototype.changeState = function( newState ){
+		
+		this.$panel.trigger('statechange', { state: newState });
+	};
+	
+	Ui.Panel.prototype.minimalize = function(){
+			
+		this.$panel.removeClass('normalized supersized');
+		this.$panel.addClass('minimalized');
+		//this.$panelMiniContent.text('I am minimalized!');
+	};
+	
+	Ui.Panel.prototype.normalize = function(){
+		
+		this.$panel.removeClass('minimalized supersized');
+		this.$panel.addClass('normalized');
+		//this.$panelNormalContent.text('I am normalized!');
+	};
+	
+	Ui.Panel.prototype.supersize = function(){
+		
+		this.$panel.removeClass('minimalized normalized');
+		this.$panel.addClass('supersized');
+		//this.$panelFullContent.text('I am supersized!');
+	};
+
+	Ui.Panel.prototype.move = function(){
+
+	};
+
+		
+
 
     $.fn.universalizeMe = function(options){
         
@@ -122,7 +128,7 @@
 		return this;
     };
 
-})(jQuery);
+//})(jQuery);
 
 
 
