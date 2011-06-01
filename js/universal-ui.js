@@ -59,11 +59,19 @@
 		
 		this.$panel = $(thisPanel);
 		this.$panel.attr('id','panel-' + panelsCounter);
+		this.normalize();
 		
 		this.$panelMiniContent = this.$panel.find(this.options.panelMiniContentSelector);
 		this.$panelNormalContent = this.$panel.find(this.options.panelNormalContentSelector);
 		this.$panelFullContent = this.$panel.find(this.options.panelFullContentSelector);
 		
+		this.bindStateChangeEvent();
+		
+	};
+	
+	Ui.Panel.prototype.bindStateChangeEvent = function(){
+	
+		var that = this;
 		this.$panel.bind('statechange', function(e, data){
 			switch(data.state) {
 				case 0:
@@ -80,14 +88,20 @@
 					return;
 			}
 			
-			that.state = data.state;
+			setState( data.state );
 		});
-	};
+		
+		function setState( newState ){
+		
+			that.state = newState;
+		}
+	}
 	
 	Ui.Panel.prototype.getState = function(){
 	
 		return this.state;
-	}
+	};
+
 
 	Ui.Panel.prototype.changeState = function( newState ){
 		
@@ -115,9 +129,6 @@
 		//this.$panelFullContent.text('I am supersized!');
 	};
 
-	Ui.Panel.prototype.move = function(){
-
-	};
 
 		
 

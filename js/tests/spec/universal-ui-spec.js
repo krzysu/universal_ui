@@ -1,58 +1,52 @@
+
 describe("Panel", function() {
-  var player;
-  var song;
 
-  beforeEach(function() {
-    player = new Player();
-    song = new Song();
-  });
+	var panel;
+	
+	beforeEach(function () {
+		jasmine.getFixtures().fixturesPath = 'spec/fixtures';
+		jasmine.getFixtures().load('panel.html');
+		
+		panel = new Ui.Panel({}, '.panel', 2);
+	});
 
-  it("should be able to play a Song", function() {
-    player.play(song);
-    expect(player.currentlyPlayingSong).toEqual(song);
+	it("has auto generated id", function() {
 
-    //demonstrates use of custom matcher
-    expect(player).toBePlaying(song);
-  });
+		expect(panel.$panel).toHaveId('panel-2');
+	});
+	
+	it("can change its state to minimalized", function() {
 
-  describe("when song has been paused", function() {
-    beforeEach(function() {
-      player.play(song);
-      player.pause();
-    });
+		panel.changeState(0); //states: ['mini', 'normal', 'full'], //[0, 1, 2]
 
-    it("should indicate that the song is currently paused", function() {
-      expect(player.isPlaying).toBeFalsy();
+		expect(panel.state).toEqual(0);
+		expect(panel.$panel).toHaveClass('minimalized');
+	});
+	
+	it("can change its state to normalized", function() {
 
-      // demonstrates use of 'not' with a custom matcher
-      expect(player).not.toBePlaying(song);
-    });
+		panel.changeState(1); //states: ['mini', 'normal', 'full'], //[0, 1, 2]
 
-    it("should be possible to resume", function() {
-      player.resume();
-      expect(player.isPlaying).toBeTruthy();
-      expect(player.currentlyPlayingSong).toEqual(song);
-    });
-  });
+		expect(panel.state).toEqual(1);
+		expect(panel.$panel).toHaveClass('normalized');
+	});
+	
+	it("can change its state to supersized", function() {
 
-  // demonstrates use of spies to intercept and test method calls
-  it("tells the current song if the user has made it a favorite", function() {
-    spyOn(song, 'persistFavoriteStatus');
+		panel.changeState(2); //states: ['mini', 'normal', 'full'], //[0, 1, 2]
 
-    player.play(song);
-    player.makeFavorite();
+		expect(panel.state).toEqual(2);
+		expect(panel.$panel).toHaveClass('supersized');
+	});
+	
+	
+	it("handles statechange event", function() {
 
-    expect(song.persistFavoriteStatus).toHaveBeenCalledWith(true);
-  });
+		expect(panel.$panel).toHandle("statechange");
+	});
+	
+	
+	
 
-  //demonstrates use of expected exceptions
-  describe("#resume", function() {
-    it("should throw an exception if song is already playing", function() {
-      player.play(song);
-
-      expect(function() {
-        player.resume();
-      }).toThrow("song is already playing");
-    });
-  });
 });
+
