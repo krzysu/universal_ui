@@ -3,7 +3,8 @@
 
 	var Ui = {};
 
-	Ui = { //PanelsSupervisor -> to refactor
+	/* PanelsSupervisor - knows all panels and controls actions between them */
+	Ui.PanelsSupervisor = { //singleton in fact
 	
 		panelsCounter: 0,
 		panels: [],
@@ -12,7 +13,9 @@
 		$panels: null,
 		
 		options: {
-			panelSelector: '.panel'
+			panelSelector: '.panel',
+			panelHeaderSelector: '.panel_head',
+			panelContentSelector: '.panel_content'
 		},
 		
 		init: function(panelsBoxSelector, options) {
@@ -25,14 +28,55 @@
 			
 			this.$panels.each(function(index, panel) {
 				
-				that.panels.push(new Ui.Panel(that.options, panel, index));
-				that.panelsCounter++;
-				
-				
+				that.registerPanel(panel, that.options);
 			});
+
+			this.bindSomePanelHasChangedItsStateEvent();
 			
-			that.panels[0].changeState(0); //test
-			that.panels[1].changeState(2); //test
+		},
+		
+		registerPanel: function(panelSelector, options) {
+		
+			var that = this;
+			that.panels.push(new Ui.Panel(options, panelSelector, that.panelsCounter));
+			that.panelsCounter++;
+		},
+		
+		bindSomePanelHasChangedItsStateEvent: function() {
+		
+			var that = this;
+			this.$panelsBox.bind('somePanelHasChangedItsState', function(e, data) {
+
+				//console.log(data);
+				//alert('Now I need to do sth with other panels than panel no. ' + data.panelId);
+				
+				switch(data.newState) {
+					case 0:
+						//
+						break;
+					case 1:
+						//that.normalizeOthersThan( data.panelId );
+						break;
+					case 2:
+						that.minimalizeOthersThan( data.panelId );
+						break;
+					default:
+						throw new Error("PanelSupervisor does not know this state");
+						return;
+				}
+			});
+		},
+		
+		minimalizeOthersThan: function( panelId ) {
+		
+			$.each(this.panels, function(i, val){
+			
+				if( i == panelId) {
+					return true;
+				}
+				
+				val.minimalize();
+			});
 		}
 	};
  
@@ -52,6 +96,7 @@
 		
 		//states: ['mini', 'normal', 'full'], //[0,1,2]
 		this.state = 1;
+		this.id = panelsCounter;
 		
 		this.draggable = true;
 		this.resizable = true;
@@ -59,14 +104,14 @@
 		
 		this.$panel = $(thisPanel);
 		this.$panel.attr('id','panel-' + panelsCounter);
-		this.normalize();
 		
 		this.$panelMiniContent = this.$panel.find(this.options.panelMiniContentSelector);
 		this.$panelNormalContent = this.$panel.find(this.options.panelNormalContentSelector);
 		this.$panelFullContent = this.$panel.find(this.options.panelFullContentSelector);
 		
+		this.normalize();
 		this.bindStateChangeEvent();
-		
+		this.createChangeStateControls();
 	};
 	
 	Ui.Panel.prototype.bindStateChangeEvent = function(){
@@ -84,17 +129,16 @@
 					that.supersize();
 					break;
 				default:
-					throw new Error("state unknown");
+					throw new Error("panel state unknown");
 					return;
 			}
-			
-			setState( data.state );
+
+			//PanelsSupervisor should know about this too
+			Ui.PanelsSupervisor.$panelsBox.trigger('somePanelHasChangedItsState', {
+				panelId: that.id,
+				newState: data.state
+			});
 		});
-		
-		function setState( newState ){
-		
-			that.state = newState;
-		}
 	}
 	
 	Ui.Panel.prototype.getState = function(){
@@ -110,32 +154,74 @@
 	
 	Ui.Panel.prototype.minimalize = function(){
 			
+		this.state = 0;
 		this.$panel.removeClass('normalized supersized');
 		this.$panel.addClass('minimalized');
-		//this.$panelMiniContent.text('I am minimalized!');
+		this.$panelMiniContent.show();
+		this.$panelNormalContent.hide();
+		this.$panelFullContent.hide();
 	};
 	
 	Ui.Panel.prototype.normalize = function(){
 		
+		this.state = 1;
 		this.$panel.removeClass('minimalized supersized');
 		this.$panel.addClass('normalized');
-		//this.$panelNormalContent.text('I am normalized!');
+		this.$panelMiniContent.hide();
+		this.$panelNormalContent.show();
+		this.$panelFullContent.hide();
 	};
 	
 	Ui.Panel.prototype.supersize = function(){
 		
+		this.state = 2;
 		this.$panel.removeClass('minimalized normalized');
 		this.$panel.addClass('supersized');
-		//this.$panelFullContent.text('I am supersized!');
+		this.$panelMiniContent.hide();
+		this.$panelNormalContent.hide();
+		this.$panelFullContent.show();
 	};
 
+	Ui.Panel.prototype.createChangeStateControls = function(){
+		
+		var that = this;
+		this.controls = {};
+		this.$header = this.$panel.find(this.options.panelHeaderSelector);
+		
+		this.controls.$minimalizeControl = $('<a />').attr({
+			'id': 'panel-' + that.id + '-min-control',
+			'class': 'control control-mini',
+			'href': '#'
+		}).text('minimalizeMe').appendTo( this.$header );
 
+		this.bindChangeStateControlsEvents();
+	};
+	
+	Ui.Panel.prototype.bindChangeStateControlsEvents = function(){
+	
+		var that = this;
+		this.controls.$minimalizeControl.bind('click', function(e) {
+			e.preventDefault();
+			that.changeState(0);
+		});
+		
+		/*this.controls.$normalizeControl.bind('click', function() {
+		
+			that.changeState(1);
+		});
+		
+		this.controls.$supersizeControl.bind('click', function() {
+		
+			that.changeState(2);
+		});*/
+	};
+	
 		
 
 
     $.fn.universalizeMe = function(options){
         
-        Ui.init(this, options); //only one element is allowed
+        Ui.PanelsSupervisor.init(this, options); //only one element is allowed
 		return this;
     };
 
