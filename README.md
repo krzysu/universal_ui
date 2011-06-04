@@ -1,3 +1,8 @@
+* * *
+### WARNING! project still in development so no working version is available ###
+* * *
+
+
 UniversalUI
 ===========
 
@@ -5,7 +10,10 @@ UniversalUI
 
 Put life in your HTML code with one line of code. It cannot be easier!
 
-### WARNING! project still in development so no working version is available ###
+Demo
+----
+
+some link will be here
 
 Basics
 ------
