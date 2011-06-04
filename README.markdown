@@ -10,59 +10,59 @@ Basics
 
 ### HTML: ###
 
-`<ul id="panels" class="panels_list">
-	<li>
-		<div class="panel">
-			<div class="panel_head">
-				<h3>Header</h3>
+	<ul id="panels" class="panels_list">
+		<li>
+			<div class="panel">
+				<div class="panel_head">
+					<h3>Header</h3>
+				</div>
+				<div class="panel_content">
+					<div class="content_mini">content minimalized</div>
+					<div class="content_normal">content normal</div>
+					<div class="content_full">content full window</div>
+				</div>
 			</div>
-			<div class="panel_content">
-				<div class="content_mini">content minimalized</div>
-				<div class="content_normal">content normal</div>
-				<div class="content_full">content full window</div>
+		</li>
+		<li>
+			<div class="panel">
+				<div class="panel_head">
+					<h3>Header 2</h3>
+				</div>
+				<div class="panel_content">
+					<div class="content_mini">content minimalized</div>
+					<div class="content_normal">content normal</div>
+					<div class="content_full">content full window</div>
+				</div>
 			</div>
-		</div>
-	</li>
-	<li>
-		<div class="panel">
-			<div class="panel_head">
-				<h3>Header 2</h3>
+		</li>
+		<li>  
+			<div class="panel">
+				<div class="panel_head">
+					<h3>Header 3</h3>
+				</div>
+				<div class="panel_content">
+					<div class="content_mini">content minimalized</div>
+					<div class="content_normal">content normal</div>
+					<div class="content_full">content full window</div>
+				</div>
 			</div>
-			<div class="panel_content">
-				<div class="content_mini">content minimalized</div>
-				<div class="content_normal">content normal</div>
-				<div class="content_full">content full window</div>
-			</div>
-		</div>
-	</li>
-	<li>  
-		<div class="panel">
-			<div class="panel_head">
-				<h3>Header 3</h3>
-			</div>
-			<div class="panel_content">
-				<div class="content_mini">content minimalized</div>
-				<div class="content_normal">content normal</div>
-				<div class="content_full">content full window</div>
-			</div>
-		</div>
-	</li>
-</ul>`
+		</li>
+	</ul>
 
 ### JavaScript: ###
 
-`$('#panels').universalizeMe( [options] );`
+	$('#panels').universalizeMe( [options] );
 
 where all options are optional :)
 
-`options = {
-	panelSelector: '.panel',
-	panelHeaderSelector: '.panel_head',
-	panelContentSelector: '.panel_content'
-	panelMiniContentSelector: '.content_mini',
-	panelNormalContentSelector: '.content_normal',
-	panelFullContentSelector: '.content_full'
-}`
+	options = {
+		panelSelector: '.panel',
+		panelHeaderSelector: '.panel_head',
+		panelContentSelector: '.panel_content'
+		panelMiniContentSelector: '.content_mini',
+		panelNormalContentSelector: '.content_normal',
+		panelFullContentSelector: '.content_full'
+	}
 
 TODO:
 -----
