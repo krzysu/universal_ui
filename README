@@ -1,6 +1,16 @@
-HTML:
+UniversalUI
+===========
 
-<ul id="panels" class="panels_list">
+#### JavaScript based, jQuery powered, UI generator ####
+
+Put life in your HTML code with one line of code. It cannot be easier!
+
+Basics
+------
+
+### HTML: ###
+
+`<ul id="panels" class="panels_list">
 	<li>
 		<div class="panel">
 			<div class="panel_head">
@@ -37,27 +47,29 @@ HTML:
 			</div>
 		</div>
 	</li>
-</ul>
+</ul>`
 
-JS:
+### JavaScript: ###
 
-$('#panels').universalizeMe( [options] );
+`$('#panels').universalizeMe( [options] );`
 
-OPTIONS:
+where all options are optional :)
 
-options = {
+`options = {
 	panelSelector: '.panel',
 	panelHeaderSelector: '.panel_head',
 	panelContentSelector: '.panel_content'
 	panelMiniContentSelector: '.content_mini',
 	panelNormalContentSelector: '.content_normal',
 	panelFullContentSelector: '.content_full'
-}
+}`
 
 TODO:
-- separate CSS files for basic layout and themes
-- jquery bbq integration for creating shortcuts to views
-- create WaitingRoom and move minimalized Panels there
-- full state for real
+-----
 
-- set states of panels accordingly if HTML nodes has right classes (i.e. if during initialization panel has class 'minimalized' set its state to '0')
+-   separate CSS files for basic layout and themes
+-   jquery bbq integration for creating shortcuts to views
+-   create WaitingRoom and move minimalized Panels there
+-   full state for real
+
+-   set states of panels accordingly if HTML nodes has right classes (i.e. if during initialization panel has class `minimalized` set its state to `0`)
