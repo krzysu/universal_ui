@@ -52,9 +52,56 @@ describe("Panel", function() {
 	
 	it("handles statechange event", function() {
 
-		expect(panel.$panel).toHandle("statechange");
+		expect(panel.$panel).toHandle('statechange');
 	});
 	
+	describe("has controls", function() {
+
+	
+		it("to change its state to minimalized", function() {
+
+			expect(panel.$header).toContain('#panel-2-control-mini');
+		});
+		
+		it("to change its state to normalized", function() {
+
+			expect(panel.$header).toContain('#panel-2-control-norm');
+		});
+		
+		it("to change its state to supersized", function() {
+
+			expect(panel.$header).toContain('#panel-2-control-full');
+		});
+		
+		it("that handles click event", function() {
+
+			expect(panel.controls.$minimalizeControl).toHandle('click');
+			expect(panel.controls.$normalizeControl).toHandle('click');
+			expect(panel.controls.$supersizeControl).toHandle('click');
+		});
+		
+		it("minimalize control when clicked changes Panel state appropriately", function() {
+
+			spyOn(panel, 'changeState');
+			panel.controls.$minimalizeControl.trigger('click');
+			expect(panel.changeState).toHaveBeenCalledWith(0);
+		});
+		
+		it("normalize control when clicked changes Panel state appropriately", function() {
+
+			spyOn(panel, 'changeState');
+			panel.controls.$normalizeControl.trigger('click');
+			expect(panel.changeState).toHaveBeenCalledWith(1);
+		});
+		
+		it("supersize control when clicked changes Panel state appropriately", function() {
+
+			spyOn(panel, 'changeState');
+			panel.controls.$supersizeControl.trigger('click');
+			expect(panel.changeState).toHaveBeenCalledWith(2);
+		});
+	
+	});
 });
 
 describe("PanelsSupervisor", function() {
@@ -73,7 +120,7 @@ describe("PanelsSupervisor", function() {
 		
 		expect(Ui.PanelsSupervisor.panelsCounter).toEqual(1);
 		expect(Ui.PanelsSupervisor.panels.length).toEqual(1);
-		//expect(Ui.PanelsSupervisor.panels[0]).toEqual(new Ui.Panel({}, '.panel', 0) );
+		//expect(Ui.PanelsSupervisor.panels[0]).toEqual( new Ui.Panel({}, '.panel', 0) );
 		
 		expect(Ui.PanelsSupervisor.panels[1]).not.toBeDefined();
 	});

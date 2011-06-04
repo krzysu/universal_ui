@@ -55,7 +55,7 @@
 						//
 						break;
 					case 1:
-						//that.normalizeOthersThan( data.panelId );
+						that.normalizeOthersThan( data.panelId );
 						break;
 					case 2:
 						that.minimalizeOthersThan( data.panelId );
@@ -67,14 +67,20 @@
 			});
 		},
 		
+		normalizeOthersThan: function( panelId ) {
+		
+			$.each(this.panels, function(i, val){
+			
+				if( i == panelId) { return true; }
+				val.normalize();
+			});
+		},
+		
 		minimalizeOthersThan: function( panelId ) {
 		
 			$.each(this.panels, function(i, val){
 			
-				if( i == panelId) {
-					return true;
-				}
-				
+				if( i == panelId) { return true; }
 				val.minimalize();
 			});
 		}
@@ -87,6 +93,7 @@
 		var that = this;
 		
 		this.options = {
+			panelHeaderSelector: '.panel_head',
 			panelMiniContentSelector: '.content_mini',
 			panelNormalContentSelector: '.content_normal',
 			panelFullContentSelector: '.content_full'
@@ -102,7 +109,7 @@
 		this.resizable = true;
 		this.sortable = true;
 		
-		this.$panel = $(thisPanel);
+		this.$panel = $(thisPanel).eq(0);
 		this.$panel.attr('id','panel-' + panelsCounter);
 		
 		this.$panelMiniContent = this.$panel.find(this.options.panelMiniContentSelector);
@@ -188,13 +195,51 @@
 		this.controls = {};
 		this.$header = this.$panel.find(this.options.panelHeaderSelector);
 		
-		this.controls.$minimalizeControl = $('<a />').attr({
-			'id': 'panel-' + that.id + '-min-control',
-			'class': 'control control-mini',
+		this.$controlsBox = $('<div />').attr({
+			'class': 'controls-box',
+			'id': 'panel-' + that.id + '-controls-box'
+		}).appendTo( that.$header );
+		
+		var $control = $('<a />').attr({
+			'class': 'control',
 			'href': '#'
-		}).text('minimalizeMe').appendTo( this.$header );
+		});
+		
+		createMinimalizeControl();
+		createNormalizeControl();
+		createSupersizeControl();
 
 		this.bindChangeStateControlsEvents();
+		
+		function createMinimalizeControl() {
+		
+			that.controls.$minimalizeControl = $control
+				.clone()
+				.attr('id', 'panel-' + that.id + '-control-mini')
+				.addClass('control-mini')
+				.text('minimalizeMe')
+				.appendTo( that.$controlsBox );
+		}
+		
+		function createNormalizeControl() {
+		
+			that.controls.$normalizeControl = $control
+				.clone()
+				.attr('id', 'panel-' + that.id + '-control-norm')
+				.addClass('control-norm')
+				.text('normalizeMe')
+				.appendTo( that.$controlsBox );
+		}
+		
+		function createSupersizeControl() {
+		
+			that.controls.$supersizeControl = $control
+				.clone()
+				.attr('id', 'panel-' + that.id + '-control-full')
+				.addClass('control-full')
+				.text('supersizeMe')
+				.appendTo( that.$controlsBox );
+		}
 	};
 	
 	Ui.Panel.prototype.bindChangeStateControlsEvents = function(){
@@ -205,15 +250,15 @@
 			that.changeState(0);
 		});
 		
-		/*this.controls.$normalizeControl.bind('click', function() {
-		
+		this.controls.$normalizeControl.bind('click', function(e) {
+			e.preventDefault();
 			that.changeState(1);
 		});
 		
-		this.controls.$supersizeControl.bind('click', function() {
-		
+		this.controls.$supersizeControl.bind('click', function(e) {
+			e.preventDefault();
 			that.changeState(2);
-		});*/
+		});
 	};
 	
 		
