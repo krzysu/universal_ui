@@ -1,0 +1,75 @@
+UniversalUI
+===========
+
+#### JavaScript based, jQuery powered, UI generator ####
+
+Put life in your HTML code with one line of code. It cannot be easier!
+
+Basics
+------
+
+### HTML: ###
+
+`<ul id="panels" class="panels_list">
+	<li>
+		<div class="panel">
+			<div class="panel_head">
+				<h3>Header</h3>
+			</div>
+			<div class="panel_content">
+				<div class="content_mini">content minimalized</div>
+				<div class="content_normal">content normal</div>
+				<div class="content_full">content full window</div>
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="panel">
+			<div class="panel_head">
+				<h3>Header 2</h3>
+			</div>
+			<div class="panel_content">
+				<div class="content_mini">content minimalized</div>
+				<div class="content_normal">content normal</div>
+				<div class="content_full">content full window</div>
+			</div>
+		</div>
+	</li>
+	<li>  
+		<div class="panel">
+			<div class="panel_head">
+				<h3>Header 3</h3>
+			</div>
+			<div class="panel_content">
+				<div class="content_mini">content minimalized</div>
+				<div class="content_normal">content normal</div>
+				<div class="content_full">content full window</div>
+			</div>
+		</div>
+	</li>
+</ul>`
+
+### JavaScript: ###
+
+`$('#panels').universalizeMe( [options] );`
+
+where all options are optional :)
+
+`options = {
+	panelSelector: '.panel',
+	panelHeaderSelector: '.panel_head',
+	panelContentSelector: '.panel_content'
+	panelMiniContentSelector: '.content_mini',
+	panelNormalContentSelector: '.content_normal',
+	panelFullContentSelector: '.content_full'
+}`
+
+TODO:
+-----
+
+-   separate CSS files for basic layout and themes
+-   jquery bbq integration for creating shortcuts to views
+-   create WaitingRoom and move minimalized Panels there
+-   full state for real
+
+-   set states of panels accordingly if HTML nodes has right classes (i.e. if during initialization panel has class `minimalized` set its state to `0`)
