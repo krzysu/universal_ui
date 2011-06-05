@@ -19,6 +19,7 @@ Features
 --------
 
 Developer friendly:
+
 -   easy configuration, mainly from HTML code
 -   with a little effort this engine can be adjusted to every need
 -   customizable themes
@@ -26,6 +27,7 @@ Developer friendly:
 -   content of Panels can be static or loaded by AJAX when needed
 
 User friendly:
+
 -   experience almost like desktop app
 -   organize webpage as you like and then save it (by localStorage)
 
