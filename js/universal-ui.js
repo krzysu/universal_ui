@@ -47,9 +47,6 @@
 			var that = this;
 			this.$panelsBox.bind('somePanelHasChangedItsState', function(e, data) {
 
-				//console.log(data);
-				//alert('Now I need to do sth with other panels than panel no. ' + data.panelId);
-				
 				switch(data.newState) {
 					case 0:
 						//
@@ -102,12 +99,12 @@
 		this.options = $.extend({}, that.options, options);
 		
 		//states: ['mini', 'normal', 'full'], //[0,1,2]
-		this.state = 1;
+		//this.state = 1;
 		this.id = panelsCounter;
 		
-		this.draggable = true;
+		/*this.draggable = true;
 		this.resizable = true;
-		this.sortable = true;
+		this.sortable = true;*/
 		
 		this.$panel = $(thisPanel).eq(0);
 		this.$panel.attr('id','panel-' + panelsCounter);
@@ -116,7 +113,17 @@
 		this.$panelNormalContent = this.$panel.find(this.options.panelNormalContentSelector);
 		this.$panelFullContent = this.$panel.find(this.options.panelFullContentSelector);
 		
-		this.normalize();
+		if( this.$panel.hasClass('minimalized') ) {
+			this.minimalize();
+		}
+		else if( this.$panel.hasClass('supersized') ) {
+		
+			this.supersize();
+		}
+		else {
+			this.normalize();
+		}
+		
 		this.bindStateChangeEvent();
 		this.createChangeStateControls();
 	};

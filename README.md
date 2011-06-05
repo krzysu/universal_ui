@@ -8,12 +8,28 @@ UniversalUI
 
 #### JavaScript based, jQuery powered, UI generator ####
 
-Put life in your HTML code with one line of code. It cannot be easier!
+Put life in your HTML code with one line of JS code. It cannot be easier!
 
 Demo
 ----
 
 some link will be here
+
+Features
+--------
+
+Developer friendly:
+-   easy configuration, mainly from HTML code
+-   with a little effort this engine can be adjusted to every need
+-   customizable themes
+-   no pages, just bookmarkable views (shortcuts)
+-   content of Panels can be static or loaded by AJAX when needed
+
+User friendly:
+-   experience almost like desktop app
+-   organize webpage as you like and then save it (by localStorage)
+
+If you have some use case and do not know how to adopt this engine - just let me know!
 
 Basics
 ------
@@ -81,7 +97,6 @@ TODO:
 -   jquery bbq integration for creating shortcuts to views
 -   create WaitingRoom and move minimalized Panels there
 -   full state for real
--   set states of panels accordingly if HTML nodes has right classes (i.e. if during initialization panel has class `minimalized` set its state to `0`)
 
 * * *
 
